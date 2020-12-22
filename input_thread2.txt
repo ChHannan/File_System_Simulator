@@ -1,0 +1,9 @@
+show_memory_map
+read, file1.txt
+truncate, file1.txt, 10
+read, file1.txt
+truncate, file1.txt, 100
+read, file1.txt
+move, file1.txt, 1, 5, 2
+read, file1.txt
+show_memory_map

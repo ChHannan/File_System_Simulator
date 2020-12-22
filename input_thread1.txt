@@ -1,0 +1,8 @@
+read, file1.txt
+create, file1.txt
+write, file1.txt, "Hello world"
+read, file1.txt
+write_at, file1.txt, 6, "HEY "
+read_from, file1.txt, 1, 4
+read, file1.txt
+show_memory_map
