@@ -14,7 +14,6 @@ class Threader(Thread):
 
     def run(self):
         MUTEX_LOCK.acquire()
-
         if self._target is not None:
             self._return = self._target(*self._args, **self._kwargs)
         MUTEX_LOCK.release()
@@ -25,9 +24,6 @@ class Threader(Thread):
 
 
 def thread_function(input_commands: list[InputCommand], input_structure: list, file_pointer):
-    for i in input_structure:
-        print("Fun")
-        print(i.data)
     for i in input_commands:
         if i.command_name == 'create':
             file_name = str(i.file_name.strip("\n"))
@@ -119,7 +115,4 @@ def get_user_input(input_structure):
         thread_output = j.join()
         if isinstance(thread_output, list):
             input_structure = thread_output
-        for i in input_structure:
-            print("----")
-            print(i.data)
     return input_structure

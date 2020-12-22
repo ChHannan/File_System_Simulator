@@ -56,17 +56,16 @@ def get_structure_size(input_structure: list) -> int:
 
 def rewriter(initial_index: int, ending_index: int, input_name: str, input_data: str, input_structure: list,
              output_file, is_truncate=False, truncate_index=0, ) -> list:
-    previous_chunks = input_structure.copy()
     next_chunks = input_structure.copy()
-    del previous_chunks[initial_index:len(input_structure)]
+    del input_structure[initial_index:len(input_structure)]
     del next_chunks[0:ending_index + 1]
-    create(input_name, previous_chunks)
+    create(input_name, input_structure)
     if is_truncate:
-        write(input_name, input_data[0:truncate_index], previous_chunks, output_file)
+        write(input_name, input_data[0:truncate_index], input_structure, output_file)
     else:
-        write(input_name, input_data, previous_chunks, output_file)
-    previous_chunks.extend(next_chunks)
-    return previous_chunks
+        write(input_name, input_data, input_structure, output_file)
+    input_structure.extend(next_chunks)
+    return input_structure
 
 
 def create(input_name: str, input_structure: list) -> str:
@@ -161,13 +160,12 @@ def write(input_name: str, input_data: str, input_structure: list, output_file) 
             elif f_index + 1 != len(input_structure):
                 i.is_last = True
                 files_after_required_file = []
-                temporary_structure = input_structure
-                for to_delete_index in range(f_index + 1, len(temporary_structure)):
-                    files_after_required_file.append(temporary_structure.pop(f_index + 1))
-                write(input_name, input_data, temporary_structure, output_file)
-                temporary_structure.extend(files_after_required_file)
+                for to_delete_index in range(f_index + 1, len(input_structure)):
+                    files_after_required_file.append(input_structure.pop(f_index + 1))
+                write(input_name, input_data, input_structure, output_file)
+                input_structure.extend(files_after_required_file)
                 print('File written successfully', file=output_file)
-                return temporary_structure
+                return input_structure
 
     if not file_exists:
         print('File not found', file=output_file)
