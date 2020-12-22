@@ -1,0 +1,17 @@
+
+********** Memory Map View **********
+
+File Name            Chunk Number         Total Bytes         
+file1.txt            0                    24                  
+Hello HEY world
+File written successfully
+Hello HEY 
+Given index is greater than total file size
+Hello HEY 
+File written successfully
+Hloel HEY 
+
+********** Memory Map View **********
+
+File Name            Chunk Number         Total Bytes         
+file1.txt            0                    19                  

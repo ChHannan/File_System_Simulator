@@ -1,0 +1,12 @@
+No file Found
+File file1.txt created successfully
+File written successfully
+Hello world
+File written successfully
+ello
+Hello HEY world
+
+********** Memory Map View **********
+
+File Name            Chunk Number         Total Bytes         
+file1.txt            0                    24                  
