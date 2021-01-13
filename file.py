@@ -107,7 +107,7 @@ def read_from(input_name: str, starting_index: int, reading_size: int, input_str
         return output_string[starting_index:starting_index + reading_size]
 
 
-def write(input_name: str, input_data: str, input_structure: list, output_file) -> list:
+def write(input_name: str, input_data: str, input_structure: list, connection_pointer) -> list:
     file_exists = False
     for f_index, i in enumerate(input_structure):
         if i.file_name == input_name and i.is_last:
@@ -115,14 +115,14 @@ def write(input_name: str, input_data: str, input_structure: list, output_file) 
             i.is_last = False
             if (len(input_data) + (len(list_converter(input_data)) * len(input_name)) + get_structure_size(
                     input_structure)) > MEMORY_SIZE:
-                print('Insufficient storage!', file=output_file)
+                connection_pointer.sendall(str.encode('Insufficient storage!'))
                 return input_structure
 
             # If file has no content
             if len(i.data) == 0:
                 if len(input_data) <= 32:
                     input_structure[f_index] = File(input_name, input_data)
-                    print('File written successfully', file=output_file)
+                    connection_pointer.sendall(str.encode('File written successfully'))
                     return input_structure
                 data_list = list_converter(input_data)
                 for index, files in enumerate(data_list):
@@ -135,7 +135,7 @@ def write(input_name: str, input_data: str, input_structure: list, output_file) 
                         input_structure.append(f)
                     else:
                         input_structure.append(f)
-                print('File written successfully', file=output_file)
+                connection_pointer.sendall(str.encode('File written successfully'))
                 return input_structure
 
             # If file already has content in it
@@ -153,7 +153,7 @@ def write(input_name: str, input_data: str, input_structure: list, output_file) 
                     if index + 1 == len(data_list):
                         f.is_last = True
                     input_structure.append(f)
-                print('File written successfully', file=output_file)
+                connection_pointer.sendall(str.encode('File written successfully'))
                 return input_structure
 
             # If file is not last in the list
@@ -162,34 +162,34 @@ def write(input_name: str, input_data: str, input_structure: list, output_file) 
                 files_after_required_file = []
                 for to_delete_index in range(f_index + 1, len(input_structure)):
                     files_after_required_file.append(input_structure.pop(f_index + 1))
-                write(input_name, input_data, input_structure, output_file)
+                write(input_name, input_data, input_structure, connection_pointer)
                 input_structure.extend(files_after_required_file)
-                print('File written successfully', file=output_file)
+                connection_pointer.sendall(str.encode('File written successfully'))
                 return input_structure
 
     if not file_exists:
-        print('File not found', file=output_file)
+        connection_pointer.sendall(str.encode('File not found'))
         return input_structure
 
 
-def write_at(input_name: str, write_at_index: int, input_data: str, input_structure: list, output_file) -> list:
+def write_at(input_name: str, write_at_index: int, input_data: str, input_structure: list, connection_pointer) -> list:
     starting_index = get_initial_index(input_name, input_structure)
     last_index = get_last_index(input_name, input_structure)
     is_file_exists = file_existence_checker(input_name, input_structure)
     read_data = read(input_name, input_structure)
 
     if len(read_data) == 0:
-        print('\nCannot write at index in empty file!\n', file=output_file)
+        connection_pointer.sendall(str.encode('\nCannot write at index in empty file!\n'))
         return input_structure
     read_data = read_data[0:write_at_index] + input_data + read_data[write_at_index:len(read_data)]
     if is_file_exists:
         if (len(input_data) + (len(list_converter(input_data)) * len(input_name)) + get_structure_size(
                 input_structure)) > MEMORY_SIZE:
-            print('Insufficient storage!', file=output_file)
+            connection_pointer.sendall(str.encode('Insufficient storage!'))
             return input_structure
-        return rewriter(starting_index, last_index, input_name, read_data, input_structure, output_file)
+        return rewriter(starting_index, last_index, input_name, read_data, input_structure, connection_pointer)
     else:
-        print('\nFile not found\n', file=output_file)
+        connection_pointer.sendall(str.encode('\nFile not found\n'))
         return input_structure
 
 
@@ -202,25 +202,25 @@ def delete(input_name: str, input_structure: list) -> str:
     return 'No File Found'
 
 
-def truncate(input_name: str, truncate_index: int, input_structure: list, output_file) -> list:
+def truncate(input_name: str, truncate_index: int, input_structure: list, connection_pointer) -> list:
     starting_index = get_initial_index(input_name, input_structure)
     last_index = get_last_index(input_name, input_structure)
     is_file_exists = file_existence_checker(input_name, input_structure)
     read_data = read(input_name, input_structure)
 
     if len(read_data) < truncate_index:
-        print('Given index is greater than total file size', file=output_file)
+        connection_pointer.sendall(str.encode('Given index is greater than total file size'))
         return input_structure
     if is_file_exists:
-        return rewriter(starting_index, last_index, input_name, read_data, input_structure, output_file, True,
+        return rewriter(starting_index, last_index, input_name, read_data, input_structure, connection_pointer, True,
                         truncate_index)
     else:
-        print('File not found', file=output_file)
+        connection_pointer.sendall(str.encode('File not found'))
         return input_structure
 
 
 def move_within_file(input_name: str, initial_index: int, ending_index: int, data_size: int,
-                     input_structure: list, output_file) -> list:
+                     input_structure: list, connection_pointer) -> list:
     starting_index = get_initial_index(input_name, input_structure)
     last_index = get_last_index(input_name, input_structure)
     file_exists = file_existence_checker(input_name, input_structure)
@@ -238,12 +238,12 @@ def move_within_file(input_name: str, initial_index: int, ending_index: int, dat
                     read_data[ending_index:initial_index] + \
                     read_data[initial_index + data_size:len(read_data)]
     else:
-        print('Invalid parameters!', file=output_file)
+        connection_pointer.sendall(str.encode('Invalid parameters!'))
         return input_structure
     if file_exists:
-        return rewriter(starting_index, last_index, input_name, read_data, input_structure, output_file)
+        return rewriter(starting_index, last_index, input_name, read_data, input_structure, connection_pointer)
     else:
-        print('File not found', file=output_file)
+        connection_pointer.sendall(str.encode('File not found'))
         return input_structure
 
 
@@ -285,12 +285,13 @@ def memory_map_creator(input_structure) -> dict:
     return memory_map
 
 
-def print_memory_map(input_structure: list, output_file) -> None:
+def print_memory_map(input_structure: list, connection_pointer) -> None:
     memory_map = memory_map_creator(input_structure)
-
-    print('\n********** Memory Map View **********\n', file=output_file)
-    print("{:<20} {:<20} {:<20}".format('File Name', 'Chunk Number', 'Total Bytes'), file=output_file)
+    data_to_send = "\n********** Memory Map View **********\n\n" + \
+                   "{:<20} {:<20} {:<20}\n".format('File Name', 'Chunk Number', 'Total Bytes')
     for i in memory_map:
         chunks = [str(i) for i in memory_map[i].get('chunks')]
-        print("{:<20} {:<20} {:<20}".format(memory_map[i].get('name'), ', '.join(chunks), memory_map[i].get('bytes')),
-              file=output_file)
+        output_map = "{:<20} {:<20} {:<20}\n".format(memory_map[i].get('name'), ', '.join(chunks),
+                                                     memory_map[i].get('bytes')),
+        data_to_send += ''.join(output_map)
+    connection_pointer.sendall(str.encode(data_to_send))
