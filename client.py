@@ -42,7 +42,7 @@ def main():
         client_socket.send(str.encode(input_command))
         server_response = client_socket.recv(4096).decode('utf-8')
         if server_response == 'executing':
-            print(client_socket.recv(4096).decode('utf-8'))
+            print("Current File is under process so cannot be accessed")
             print(client_socket.recv(4096).decode('utf-8'))
         else:
             print(server_response)

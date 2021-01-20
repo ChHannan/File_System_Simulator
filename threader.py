@@ -30,7 +30,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(readers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 writers_queue.append(connection_pointer)
@@ -46,7 +45,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(writers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 readers_queue.append(connection_pointer)
@@ -63,7 +61,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(writers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 readers_queue.append(connection_pointer)
@@ -80,7 +77,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(readers_queue) > 0 or len(writers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 writers_queue.append(connection_pointer)
@@ -97,7 +93,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(readers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 writers_queue.append(connection_pointer)
@@ -114,7 +109,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(readers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 writers_queue.append(connection_pointer)
@@ -133,7 +127,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(readers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 writers_queue.append(connection_pointer)
@@ -149,7 +142,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(readers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 writers_queue.append(connection_pointer)
@@ -165,7 +157,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(readers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 writers_queue.append(connection_pointer)
@@ -182,7 +173,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(writers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 readers_queue.append(connection_pointer)
@@ -195,7 +185,6 @@ def thread_function(input_commands: list[InputCommand], input_structure: list, c
             while len(writers_queue) > 0:
                 if not has_sent:
                     connection_pointer.sendall(str.encode('executing'))
-                    connection_pointer.sendall(str.encode("Current File is under process so cannot be accessed"))
                     has_sent = not has_sent
             try:
                 readers_queue.append(connection_pointer)
