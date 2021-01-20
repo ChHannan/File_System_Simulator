@@ -40,8 +40,12 @@ def main():
     while input_command != 'exit':
         input_command = input('Enter the file command: ')
         client_socket.send(str.encode(input_command))
-        server_response = client_socket.recv(4096)
-        print(server_response.decode('utf-8'))
+        server_response = client_socket.recv(4096).decode('utf-8')
+        if server_response == 'executing':
+            print(client_socket.recv(4096).decode('utf-8'))
+            print(client_socket.recv(4096).decode('utf-8'))
+        else:
+            print(server_response)
     client_socket.close()
 
 
